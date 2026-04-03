@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taste of Naija – Order Online</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:  #1a6b2f;
+    --gold:   #c8922a;
+    --cream:  #fdf8f2;
+    --warm:   #f5ede0;
+    --border: #e8ddd0;
+    --text:   #1c1008;
+    --muted:  #7a6a58;
+    --red:    #c0392b;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--green);
+    text-align: center;
+    padding: 48px 20px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 120%, rgba(200,146,42,.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-flag {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+  .hero-flag span {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .flag-g { background: #1a6b2f; border: 2px solid rgba(255,255,255,.3); }
+  .flag-w { background: #fff; }
+  .flag-g2 { background: #1a6b2f; border: 2px solid rgba(255,255,255,.3); }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 7vw, 3.2rem);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero-sub {
+    color: rgba(255,255,255,.7);
+    font-size: .9rem;
+    font-weight: 300;
+    margin-top: 8px;
+    letter-spacing: .5px;
+  }
+  .notice-bar {
+    background: var(--gold);
+    color: #fff;
+    text-align: center;
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .4px;
+    padding: 9px 20px;
+  }
+
+  /* ── LAYOUT ── */
+  .page-wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 28px 16px 60px;
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--green);
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--gold);
+    margin-bottom: 16px;
+    margin-top: 32px;
+  }
+  .section-label:first-child { margin-top: 0; }
+
+  /* ── MENU ITEM CARDS ── */
+  .menu-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    transition: box-shadow .2s;
+  }
+  .menu-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,.07); }
+
+  .menu-card-header {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--warm);
+  }
+  .menu-card-name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .menu-card-desc {
+    font-size: .8rem;
+    color: var(--muted);
+    margin-top: 3px;
+    font-weight: 300;
+  }
+
+  /* ── VARIANT ROWS ── */
+  .variant-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--warm);
+  }
+  .variant-row:last-child { border-bottom: none; }
+  .variant-label { font-size: .9rem; color: var(--text); font-weight: 400; }
+  .variant-price { font-size: .9rem; color: var(--green); font-weight: 600; margin-right: 12px; }
+
+  /* ── COUNTER ── */
+  .counter {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--cream);
+  }
+  .counter-btn {
+    width: 34px; height: 34px;
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--green);
+    cursor: pointer;
+    transition: background .15s;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .counter-btn:hover { background: var(--warm); }
+  .counter-val {
+    width: 36px;
+    text-align: center;
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--text);
+    border: none;
+    background: none;
+    pointer-events: none;
+    padding: 0;
+    -moz-appearance: textfield;
+  }
+  .counter-val::-webkit-outer-spin-button,
+  .counter-val::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+  /* ── VARIANT RIGHT SIDE ── */
+  .variant-right {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-shrink: 0;
+  }
+
+  /* ── DELIVERY TOGGLE ── */
+  .toggle-group {
+    display: flex;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--warm);
+    margin-bottom: 16px;
+  }
+  .toggle-btn {
+    flex: 1;
+    padding: 10px;
+    background: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .9rem;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .2s;
+    text-align: center;
+  }
+  .toggle-btn.active {
+    background: var(--green);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* ── SELECT STYLED ── */
+  .styled-select {
+    width: 100%;
+    padding: 11px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .95rem;
+    color: var(--text);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231a6b2f' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  .styled-select:focus { outline: none; border-color: var(--green); }
+
+  .delivery-fee-note {
+    font-size: .78rem;
+    color: var(--muted);
+    margin-top: -6px;
+    margin-bottom: 10px;
+  }
+
+  /* ── FORM FIELDS ── */
+  .form-field {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .95rem;
+    color: var(--text);
+    background: #fff;
+    margin-bottom: 10px;
+    transition: border-color .2s;
+  }
+  .form-field:focus { outline: none; border-color: var(--green); }
+
+  /* ── ORDER SUMMARY ── */
+  .summary-card {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 18px 14px;
+    margin-top: 24px;
+    margin-bottom: 16px;
+  }
+  .summary-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--warm);
+  }
+  #summary-lines { font-size: .88rem; color: var(--muted); min-height: 20px; }
+  .summary-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+    color: var(--text);
+  }
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1.5px solid var(--border);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--green);
+  }
+
+  /* ── SUBMIT BUTTON ── */
+  .btn-order {
+    width: 100%;
+    background: #25D366;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: .3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background .2s, transform .1s;
+  }
+  .btn-order:hover { background: #1ebe5d; }
+  .btn-order:active { transform: scale(.98); }
+  .btn-order svg { flex-shrink: 0; }
+
+  .empty-note {
+    font-size: .8rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ── VALIDATION ── */
+  .error-msg {
+    color: var(--red);
+    font-size: .82rem;
+    margin-top: -6px;
+    margin-bottom: 8px;
+    display: none;
+  }
+  .error-msg.show { display: block; }
+  .form-field.invalid { border-color: var(--red); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-flag">
+    <span class="flag-g"></span>
+    <span class="flag-w"></span>
+    <span class="flag-g2"></span>
+  </div>
+  <h1>Taste of <span>Naija</span></h1>
+  <p class="hero-sub">Authentic Nigerian food · Order for delivery or pickup</p>
+</div>
+<div class="notice-bar">⏰ Orders close at 10PM the night before · Limited prep slots available</div>
+
+<div class="page-wrap">
+
+  <!-- ════════════════════ MAIN MENU ════════════════════ -->
+  <div class="section-label">🍲 Main Menu</div>
+
+  <!-- Efo Riro -->
+  <div class="menu-card">
+    <div class="menu-card-header">
+      <div class="menu-card-name">Efo Riro Soup &amp; Fufu</div>
+      <div class="menu-card-desc">Beef feet · Tripe · Beef · Salt fish</div>
+    </div>
+    <div class="variant-row">
+      <span class="variant-label">Regular</span>
+      <div class="variant-right">
+        <span class="variant-price">$40</span>
+        <div class="counter" data-id="efo-reg" data-price="40" data-name="Efo Riro Regular">
+          <button class="counter-btn" onclick="changeQty('efo-reg',-1)">−</button>
+          <input class="counter-val" type="number" id="efo-reg" value="0" readonly>
+          <button class="counter-btn" onclick="changeQty('efo-reg',1)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="variant-row">
+      <span class="variant-label">Deluxe</span>
+      <div class="variant-right">
+        <span class="variant-price">$60</span>
+        <div class="counter" data-id="efo-dlx" data-price="60" data-name="Efo Riro Deluxe">
+          <button class="counter-btn" onclick="changeQty('efo-dlx',-1)">−</button>
+          <input class="counter-val" type="number" id="efo-dlx" value="0" readonly>
+          <button class="counter-btn" onclick="changeQty('efo-dlx',1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Egusi -->
+  <div class="menu-card">
+    <div class="menu-card-header">
+      <div class="menu-card-name">Egusi &amp; Fufu</div>
+      <div class="menu-card-desc">Rich melon seed soup with slow-cooked meats &amp; bold seasoning</div>
+    </div>
+    <div class="variant-row">
+      <span class="variant-label">Regular</span>
+      <div class="variant-right">
+        <span class="variant-price">$60</span>
+        <div class="counter" data-id="egusi" data-price="60" data-name="Egusi & Fufu">
+          <button class="counter-btn" onclick="changeQty('egusi',-1)">−</button>
+          <input class="counter-val" type="number" id="egusi" value="0" readonly>
+          <button class="counter-btn" onclick="changeQty('egusi',1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Okra Soup -->
+  <div class="menu-card">
+    <div class="menu-card-header">
+      <div class="menu-card-name">Okra Soup &amp; Fufu</div>
+      <div class="menu-card-desc">Silky okra soup with tender meats &amp; traditional seasoning</div>
+    </div>
+    <div class="variant-row">
+      <span class="variant-label">Regular</span>
+      <div class="variant-right">
+        <span class="variant-price">$30</span>
+        <div class="counter" data-id="okra-reg" data-price="30" data-name="Okra Soup Regular">
+          <button class="counter-btn" onclick="changeQty('okra-reg',-1)">−</button>
+          <input class="counter-val" type="number" id="okra-reg" value="0" readonly>
+          <button class="counter-btn" onclick="changeQty('okra-reg',1)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="variant-row">
+      <span class="variant-label">Large</span>
+      <div class="variant-right">
+        <span class="variant-price">$50</span>
+        <div class="counter" data-id="okra-lg" data-price="50" data-name="Okra Soup Large">
+          <button class="counter-btn" onclick="changeQty('okra-lg',-1)">−</button>
+          <input class="counter-val" type="number" id="okra-lg" value="0" readonly>
+          <button class="counter-btn" onclick="changeQty('okra-lg',1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Jollof Rice -->
+  <div class="menu-card">
+    <div class="menu-card-header">
+      <div class="menu-card-name">Jollof Rice</div>
+      <div class="menu-card-desc">Served with Salad &amp; Plantain · Choose your protein</div>
+    </div>
+    <div class="variant-row">
+      <span class="variant-label">Chicken</span>
+      <div class="variant-right">
+        <span class="variant-price">$30</span>
+        <div class="counter" data-id="jollof-chk" data-price="30" data-name="Jollof Rice (Chicken)">
+          <button class="counter-btn" onclick="changeQty('jollof-chk',-1)">−</button>
+          <input class="counter-val" type="number" id="jollof-chk" value="0" readonly>
+          <button class="counter-btn" onclick="changeQty('jollof-chk',1)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="variant-row">
+      <span class="variant-label">Beef</span>
+      <div class="variant-right">
+        <span class="variant-price">$40</span>
+        <div class="counter" data-id="jollof-bef" data-price="40" data-name="Jollof Rice (Beef)">
+          <button class="counter-btn" onclick="changeQty('jollof-bef',-1)">−</button>
+          <input class="counter-val" type="number" id="jollof-bef" value="0" readonly>
+          <button class="counter-btn" onclick="changeQty('jollof-bef',1)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="variant-row">
+      <span class="variant-label">Fish</span>
+      <div class="variant-right">
+        <span class="variant-price">$40</span>
+        <div class="counter" data-id="jollof-fish" data-price="40" data-name="Jollof Rice (Fish)">
+          <button class="counter-btn" onclick="changeQty('jollof-fish',-1)">−</button>
+          <input class="counter-val" type="number" id="jollof-fish" value="0" readonly>
+          <button class="counter-btn" onclick="changeQty('jollof-fish',1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fish Fiesta -->
+  <div class="menu-card">
+    <div class="menu-card-header">
+      <div class="menu-card-name">Fish Fiesta (Naija Style)</div>
+      <div class="menu-card-desc">Choose your combo of two sides</div>
+    </div>
+    <div class="variant-row">
+      <span class="variant-label">Fries + Jollof Rice</span>
+      <div class="variant-right">
+        <span class="variant-price">$40</span>
+        <div class="counter" data-id="fish-fj" data-price="40" data-name="Fish Fiesta (Fries + Jollof Rice)">
+          <button class="counter-btn" onclick="changeQty('fish-fj',-1)">−</button>
+          <input class="counter-val" type="number" id="fish-fj" value="0" readonly>
+          <button class="counter-btn" onclick="changeQty('fish-fj',1)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="variant-row">
+      <span class="variant-label">Fries + Coleslaw</span>
+      <div class="variant-right">
+        <span class="variant-price">$40</span>
+        <div class="counter" data-id="fish-fc" data-price="40" data-name="Fish Fiesta (Fries + Coleslaw)">
+          <button class="counter-btn" onclick="changeQty('fish-fc',-1)">−</button>
+          <input class="counter-val" type="number" id="fish-fc" value="0" readonly>
+          <button class="counter-btn" onclick="changeQty('fish-fc',1)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="variant-row">
+      <span class="variant-label">Jollof Rice + Coleslaw</span>
+      <div class="variant-right">
+        <span class="variant-price">$40</span>
+        <div class="counter" data-id="fish-jc" data-price="40" data-name="Fish Fiesta (Jollof Rice + Coleslaw)">
+          <button class="counter-btn" onclick="changeQty('fish-jc',-1)">−</button>
+          <input class="counter-val" type="number" id="fish-jc" value="0" readonly>
+          <button class="counter-btn" onclick="changeQty('fish-jc',1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════ ADD-ONS ════════════════════ -->
+  <div class="section-label">✨ Add-Ons</div>
+
+  <div class="menu-card">
+    <div class="variant-row">
+      <div>
+        <div class="variant-label" style="font-weight:600;">Puff Puff</div>
+        <div class="menu-card-desc">Soft golden fried dough balls · slightly sweet &amp; addictive</div>
+      </div>
+      <div class="variant-right">
+        <span class="variant-price">$10</span>
+        <div class="counter" data-id="puff" data-price="10" data-name="Puff Puff">
+          <button class="counter-btn" onclick="changeQty('puff',-1)">−</button>
+          <input class="counter-val" type="number" id="puff" value="0" readonly>
+          <button class="counter-btn" onclick="changeQty('puff',1)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="variant-row">
+      <div>
+        <div class="variant-label" style="font-weight:600;">Chin Chin</div>
+        <div class="menu-card-desc">Crunchy bite-sized fried pastry snacks</div>
+      </div>
+      <div class="variant-right">
+        <span class="variant-price">$12</span>
+        <div class="counter" data-id="chin" data-price="12" data-name="Chin Chin">
+          <button class="counter-btn" onclick="changeQty('chin',-1)">−</button>
+          <input class="counter-val" type="number" id="chin" value="0" readonly>
+          <button class="counter-btn" onclick="changeQty('chin',1)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="variant-row">
+      <div>
+        <div class="variant-label" style="font-weight:600;">4 Meat Pies</div>
+        <div class="menu-card-desc">Four golden baked meat pies · classic Naija style</div>
+      </div>
+      <div class="variant-right">
+        <span class="variant-price">$20</span>
+        <div class="counter" data-id="meatpie" data-price="20" data-name="4 Meat Pies">
+          <button class="counter-btn" onclick="changeQty('meatpie',-1)">−</button>
+          <input class="counter-val" type="number" id="meatpie" value="0" readonly>
+          <button class="counter-btn" onclick="changeQty('meatpie',1)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════ DELIVERY / PICKUP ════════════════════ -->
+  <div class="section-label">📍 Delivery or Pickup</div>
+
+  <div class="toggle-group">
+    <button class="toggle-btn active" id="btn-delivery" onclick="setFulfillment('delivery')">🚚 Delivery</button>
+    <button class="toggle-btn" id="btn-pickup" onclick="setFulfillment('pickup')">🏠 Pickup</button>
+  </div>
+
+  <!-- Delivery panel -->
+  <div id="panel-delivery">
+    <select class="styled-select" id="delivery-area">
+      <option value="">— Select your area —</option>
+      <option value="Vieux-Fort">Vieux-Fort</option>
+      <option value="Soufriere">Soufriere</option>
+      <option value="Castries">Castries</option>
+      <option value="Gros-Islet">Gros-Islet</option>
+    </select>
+    <div class="delivery-fee-note" id="delivery-fee-note">Select an area to see delivery fee</div>
+    <div class="error-msg" id="err-delivery">Please select a delivery area.</div>
+  </div>
+
+  <!-- Pickup panel -->
+  <div id="panel-pickup" style="display:none;">
+    <select class="styled-select" id="pickup-area">
+      <option value="">— Select pickup location —</option>
+      <option value="Vieux-Fort" data-fee="15">Vieux-Fort (+$15)</option>
+      <option value="Soufriere" data-fee="15">Soufriere (+$15)</option>
+      <option value="Castries" data-fee="15">Castries (+$15)</option>
+      <option value="Gros-Islet" data-fee="15">Gros-Islet (+$15)</option>
+    </select>
+    <div class="error-msg" id="err-pickup">Please select a pickup location.</div>
+  </div>
+
+  <!-- ════════════════════ SCHEDULE ════════════════════ -->
+  <div class="section-label">📅 Schedule</div>
+
+  <select class="styled-select" id="sched-day">
+    <option value="">— Select day —</option>
+    <option>Thursday</option>
+    <option>Friday</option>
+    <option>Saturday</option>
+    <option>Sunday</option>
+  </select>
+  <div class="error-msg" id="err-day">Please select a day.</div>
+
+  <!-- ════════════════════ YOUR INFO ════════════════════ -->
+  <div class="section-label">👤 Your Info</div>
+
+  <input class="form-field" type="text" id="cust-name" placeholder="Your name">
+  <div class="error-msg" id="err-name">Please enter your name.</div>
+
+  <input class="form-field" type="tel" id="cust-phone" placeholder="Your phone number">
+  <div class="error-msg" id="err-phone">Please enter your phone number.</div>
+
+  <!-- ════════════════════ ORDER SUMMARY ════════════════════ -->
+  <div class="summary-card">
+    <div class="summary-title">Order Summary</div>
+    <div id="summary-lines"><span class="empty-note">No items selected yet</span></div>
+    <div class="summary-total">
+      <span>Total</span>
+      <span id="summary-total">$0</span>
+    </div>
+  </div>
+
+  <!-- SUBMIT -->
+  <button class="btn-order" onclick="sendOrder()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+    </svg>
+    Send Order via WhatsApp
+  </button>
+
+</div><!-- /page-wrap -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+// ── STATE ──
+const items = {}; // id → { name, price, qty }
+let fulfillment = 'delivery';
+
+// Register all counters
+document.querySelectorAll('.counter').forEach(c => {
+  const id    = c.dataset.id;
+  const price = parseInt(c.dataset.price);
+  const name  = c.dataset.name;
+  items[id] = { name, price, qty: 0 };
+});
+
+// ── COUNTER LOGIC ──
+function changeQty(id, delta) {
+  const inp = document.getElementById(id);
+  let v = parseInt(inp.value) + delta;
+  if (v < 0) v = 0;
+  inp.value = v;
+  items[id].qty = v;
+  updateSummary();
+}
+
+// ── FULFILLMENT TOGGLE ──
+function setFulfillment(type) {
+  fulfillment = type;
+  document.getElementById('btn-delivery').classList.toggle('active', type === 'delivery');
+  document.getElementById('btn-pickup').classList.toggle('active',   type === 'pickup');
+  document.getElementById('panel-delivery').style.display = type === 'delivery' ? '' : 'none';
+  document.getElementById('panel-pickup').style.display   = type === 'pickup'   ? '' : 'none';
+  updateSummary();
+}
+
+// ── DELIVERY FEE ──
+function getDeliveryFee() {
+  if (fulfillment === 'delivery') {
+    const area = document.getElementById('delivery-area').value;
+    if (!area) return 0;
+    // Free delivery – fee TBD per area; set to 0 until Jamal confirms pricing
+    return 0;
+  } else {
+    const sel = document.getElementById('pickup-area');
+    const opt = sel.options[sel.selectedIndex];
+    return opt && opt.dataset.fee ? parseInt(opt.dataset.fee) : 0;
+  }
+}
+
+// ── DELIVERY AREA CHANGE ──
+document.getElementById('delivery-area').addEventListener('change', function() {
+  const area = this.value;
+  const note = document.getElementById('delivery-fee-note');
+  if (area) {
+    note.textContent = 'Delivery fee will be confirmed on WhatsApp.';
+  } else {
+    note.textContent = 'Select an area to see delivery fee';
+  }
+  updateSummary();
+});
+document.getElementById('pickup-area').addEventListener('change', updateSummary);
+
+// ── SUMMARY ──
+function updateSummary() {
+  const linesEl = document.getElementById('summary-lines');
+  const totalEl = document.getElementById('summary-total');
+  let lines = '';
+  let subtotal = 0;
+
+  Object.values(items).forEach(item => {
+    if (item.qty > 0) {
+      const amt = item.price * item.qty;
+      subtotal += amt;
+      lines += `<div class="summary-line"><span>${item.name} × ${item.qty}</span><span>$${amt}</span></div>`;
+    }
+  });
+
+  const fee = getDeliveryFee();
+  const total = subtotal + fee;
+
+  if (lines === '') {
+    linesEl.innerHTML = '<span class="empty-note">No items selected yet</span>';
+  } else {
+    if (fulfillment === 'pickup' && fee > 0) {
+      const area = document.getElementById('pickup-area').value;
+      lines += `<div class="summary-line" style="color:var(--muted)"><span>Pickup fee (${area})</span><span>$${fee}</span></div>`;
+    }
+    if (fulfillment === 'delivery' && document.getElementById('delivery-area').value) {
+      lines += `<div class="summary-line" style="color:var(--muted)"><span>Delivery fee</span><span>TBC on WhatsApp</span></div>`;
+    }
+    linesEl.innerHTML = lines;
+  }
+
+  totalEl.textContent = '$' + total;
+}
+
+// ── VALIDATION ──
+function showErr(id, show) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('show', show);
+}
+function markField(id, invalid) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('invalid', invalid);
+}
+
+function validate() {
+  let ok = true;
+
+  // Must have at least one item
+  const hasItems = Object.values(items).some(i => i.qty > 0);
+  if (!hasItems) {
+    alert('Please add at least one item to your order.');
+    ok = false;
+  }
+
+  // Area
+  if (fulfillment === 'delivery') {
+    const area = document.getElementById('delivery-area').value;
+    showErr('err-delivery', !area);
+    if (!area) ok = false;
+  } else {
+    const area = document.getElementById('pickup-area').value;
+    showErr('err-pickup', !area);
+    if (!area) ok = false;
+  }
+
+  // Day
+  const day = document.getElementById('sched-day').value;
+  showErr('err-day', !day);
+  if (!day) ok = false;
+
+  // Name
+  const name = document.getElementById('cust-name').value.trim();
+  showErr('err-name', !name);
+  markField('cust-name', !name);
+  if (!name) ok = false;
+
+  // Phone
+  const phone = document.getElementById('cust-phone').value.trim();
+  showErr('err-phone', !phone);
+  markField('cust-phone', !phone);
+  if (!phone) ok = false;
+
+  return ok;
+}
+
+// ── BUILD & SEND ORDER ──
+function sendOrder() {
+  if (!validate()) return;
+
+  const name  = document.getElementById('cust-name').value.trim();
+  const phone = document.getElementById('cust-phone').value.trim();
+  const day   = document.getElementById('sched-day').value;
+
+  let areaLabel = '';
+  let fee = 0;
+  if (fulfillment === 'delivery') {
+    areaLabel = 'Delivery to: ' + document.getElementById('delivery-area').value;
+  } else {
+    const sel = document.getElementById('pickup-area');
+    const opt = sel.options[sel.selectedIndex];
+    areaLabel = 'Pickup: ' + opt.value;
+    fee = parseInt(opt.dataset.fee || 0);
+  }
+
+  let orderLines = '';
+  let subtotal = 0;
+  Object.values(items).forEach(item => {
+    if (item.qty > 0) {
+      const amt = item.price * item.qty;
+      subtotal += amt;
+      orderLines += `• ${item.name} x${item.qty} — $${amt}\n`;
+    }
+  });
+
+  const total = subtotal + fee;
+  const feeNote = fee > 0 ? `Pickup fee: $${fee}\n` : (fulfillment === 'delivery' ? 'Delivery fee: TBC\n' : '');
+
+  const msg =
+    `🍽️ *TASTE OF NAIJA — NEW ORDER*\n\n` +
+    `*Items Ordered:*\n${orderLines}\n` +
+    `*Subtotal:* $${subtotal}\n` +
+    feeNote +
+    `*TOTAL: $${total}*\n\n` +
+    `📍 *Fulfillment:* ${areaLabel}\n` +
+    `📅 *Day:* ${day}\n\n` +
+    `👤 *Name:* ${name}\n` +
+    `📞 *Phone:* ${phone}\n\n` +
+    `🌐 www.tasteofnaija.com`;
+
+  const encoded = encodeURIComponent(msg);
+  window.open('https://wa.me/17587235872?text=' + encoded, '_blank');
+}
+
+</script>
+</body>
+</html>
